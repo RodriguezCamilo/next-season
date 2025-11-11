@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "games": "Juegos",
+    "shows": "Series",
+    "anime": "Anime",
+    "esports": "eSports"
+  },
+  "home": {
+    "title": "Próximas temporadas",
+    "searchPlaceholder": "Buscar juego o show…",
+    "status": {
+      "confirmed": "Confirmado",
+      "estimated": "Estimado",
+      "delayed": "Aplazado"
+    },
+    "dateTBA": "Por confirmar",
+    "source": "Fuente"
+  }
+}

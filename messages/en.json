@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "games": "Games",
+    "shows": "Shows",
+    "anime": "Anime",
+    "esports": "eSports"
+  },
+  "home": {
+    "title": "Upcoming seasons",
+    "searchPlaceholder": "Search a game or show…",
+    "status": {
+      "confirmed": "Confirmed",
+      "estimated": "Estimated",
+      "delayed": "Delayed"
+    },
+    "dateTBA": "To be announced",
+    "source": "Source"
+  }
+}
