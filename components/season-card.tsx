@@ -10,32 +10,63 @@ export function SeasonCard({
   data: SeasonCardData & { category: "game" | "show" | "anime" | "esport" };
   locale?: "es" | "en";
 }) {
-  // Página por producto (sin season en la URL)
   const href = `/${locale ?? "es"}/${data.category}/${data.itemSlug}`;
+
+  const hasCover =
+    typeof data.coverUrl === "string" &&
+    data.coverUrl.trim() !== "" &&
+    !/^null|undefined$/i.test(data.coverUrl.trim()) &&
+    /^https?:\/\//i.test(data.coverUrl.trim());
+
+  console.log(hasCover + " - " + data.coverUrl);
 
   const detailsLabel = locale === "en" ? "Details" : "Detalles";
   const tStatus = (s?: "confirmed" | "estimated" | "delayed") =>
-    !s ? null :
-    locale === "en" ? (s === "confirmed" ? "Confirmed" : s === "estimated" ? "Estimated" : "Delayed")
-                    : (s === "confirmed" ? "Confirmado" : s === "estimated" ? "Estimado" : "Aplazado");
+    !s
+      ? null
+      : locale === "en"
+      ? s === "confirmed"
+        ? "Confirmed"
+        : s === "estimated"
+        ? "Estimated"
+        : "Delayed"
+      : s === "confirmed"
+      ? "Confirmado"
+      : s === "estimated"
+      ? "Estimado"
+      : "Aplazado";
 
   return (
     <article className="group overflow-hidden rounded-[var(--radius)] border border-border bg-card shadow-[0_10px_30px_rgba(0,0,0,.35)]">
-      {data.coverUrl && (
+      {hasCover ? (
         <div className="relative aspect-[16/9]">
           <Image
-            src={data.coverUrl}
+            src={data.coverUrl!}
             alt={`${data.title} cover`}
             fill
+            sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           />
-          {data.status && <StatusPill status={data.status} label={tStatus(data.status)!} />}
+          {data.status && (
+            <StatusPill status={data.status} label={tStatus(data.status)!} />
+          )}
+        </div>
+      ) : (
+        <div className="relative aspect-[16/9] bg-muted/40 grid place-items-center">
+          <span className="text-xs text-muted-foreground">
+            {locale === "en" ? "No cover" : "Sin portada"}
+          </span>
+          {data.status && (
+            <StatusPill status={data.status} label={tStatus(data.status)!} />
+          )}
         </div>
       )}
 
       <div className="p-4">
         <h3 className="text-base md:text-lg font-semibold">{data.title}</h3>
-        {data.label && <p className="text-sm text-muted-foreground mt-0.5">{data.label}</p>}
+        {data.label && (
+          <p className="text-sm text-muted-foreground mt-0.5">{data.label}</p>
+        )}
 
         <div className="mt-3">
           {data.dateIso ? (
@@ -85,7 +116,9 @@ function StatusPill({
       : "bg-[color:var(--destructive)] text-black";
 
   return (
-    <span className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-medium shadow ${cls}`}>
+    <span
+      className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-medium shadow ${cls}`}
+    >
       {label}
     </span>
   );

@@ -14,6 +14,16 @@
       "delayed": "Aplazado"
     },
     "dateTBA": "Por confirmar",
-    "source": "Fuente"
+    "source": "Fuente",
+    "tabs": {
+      "games": "Juegos",
+      "shows": "Series",
+      "anime": "Anime",
+      "esports": "eSports"
+    },
+    "noCover": "Sin portada",
+    "addToCalendar": "Agregar al calendario",
+    "tbaShort": "Por confirmar",
+    "details": "Detalles"
   }
 }

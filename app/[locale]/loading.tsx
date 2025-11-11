@@ -4,14 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-8 space-y-4">
-          <div className="h-8 w-64"><Skeleton className="h-8 w-64" /></div>
-          <div className="w-full max-w-xl">
-            <Skeleton className="h-10 w-full" />
-          </div>
-        </div>
-
+      <main className="mx-auto max-w-6xl px-4 py-20">
         <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <article

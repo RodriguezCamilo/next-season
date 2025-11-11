@@ -14,6 +14,16 @@
       "delayed": "Delayed"
     },
     "dateTBA": "To be announced",
-    "source": "Source"
+    "source": "Source",
+    "tabs": {
+      "games": "Games",
+      "shows": "Shows",
+      "anime": "Anime",
+      "esports": "eSports"
+    },
+    "noCover": "No cover",
+    "addToCalendar": "Add to calendar",
+    "tbaShort": "TBA",
+    "details": "Details"
   }
 }

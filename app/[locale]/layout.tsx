@@ -11,6 +11,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "es" }];
+}
+
 export default async function LocaleLayout({
   children,
   params,
