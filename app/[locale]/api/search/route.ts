@@ -1,13 +1,13 @@
-// src/app/api/search/route.ts (o /[locale]/api/search)
 import { NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase/supabase";
+import { supabaseServerRoute } from "@/lib/supabase/route";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const q = (searchParams.get("q") || "").trim();
   const category = searchParams.get("category") || "";
 
-  const sb = supabaseServer();
+  const sb = await supabaseServerRoute();
   let query = sb
     .from("v_upcoming")
     .select("title,season_label,category,product_slug")

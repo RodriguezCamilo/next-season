@@ -1,7 +1,10 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { supabaseServer } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase/supabase";
 import { SeasonCard } from "@/components/season-card";
 import SearchCommand from "@/components/search-command";
+import AdSlot from "@/components/ad-slot";
+import { Fragment } from "react";
+import { supabaseServerRSC } from "@/lib/supabase/rsc";
 
 export const revalidate = 300;
 type C = "games" | "shows" | "anime" | "esports";
@@ -30,7 +33,7 @@ export default async function Home({
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "home" });
-  const sb = supabaseServer();
+  const sb = await supabaseServerRSC();
 
   // UI -> BD
   const map: Record<C, "game" | "show" | "anime" | "esport"> = {
@@ -94,8 +97,23 @@ export default async function Home({
         </div>
 
         <section className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((x) => (
-            <SeasonCard key={x.key as string} data={x as any} locale={locale} />
+          {items.map((x, i) => (
+            <Fragment key={`row-${x.key}-${i}`}>
+              <div>
+                <SeasonCard data={x as any} locale={locale} />
+              </div>
+
+              {i % 6 === 5 && (
+                <div className="col-span-full">
+                  <div className="sm:hidden">
+                    <AdSlot id={`home-${i}`} size="rect" />
+                  </div>
+                  <div className="hidden sm:block">
+                    <AdSlot id={`home-${i}-banner`} size="banner" />
+                  </div>
+                </div>
+              )}
+            </Fragment>
           ))}
         </section>
       </main>
