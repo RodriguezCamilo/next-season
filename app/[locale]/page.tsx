@@ -1,31 +1,41 @@
+// app/[locale]/page.tsx
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { supabaseServer } from "@/lib/supabase/supabase";
-import { SeasonCard } from "@/components/season-card";
 import SearchCommand from "@/components/search-command";
-import AdSlot from "@/components/ad-slot";
-import { Fragment } from "react";
+import InfiniteHome from "@/components/infinite-home";
 import { supabaseServerRSC } from "@/lib/supabase/rsc";
 
 export const revalidate = 300;
+
+type Locale = "es" | "en";
 type C = "games" | "shows" | "anime" | "esports";
+type Category = "game" | "show" | "anime" | "esport";
+
+type VUpcomingRow = {
+  product_id: string | null;
+  product_slug: string;
+  title: string;
+  season_label: string | null;
+  category: Category;
+  season_slug: string | null;
+  cover_url: string | null;
+  release_at: string | null;
+  status: "confirmed" | "estimated" | "delayed" | null;
+  source_name: string | null;
+  source_url: string | null;
+};
 
 export const metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
-  alternates: {
-    canonical: "/",
-    languages: { en: "/en", es: "/es" },
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  alternates: { canonical: "/", languages: { en: "/en", es: "/es" } },
   title: "Next Season",
-  description: "Track next seasons for games, shows, anime & esports.",
+  description: "Track next seasons for games, shows, anime & esports."
 };
 
 export default async function Home({
   params,
-  searchParams,
+  searchParams
 }: {
-  params: Promise<{ locale: "es" | "en" }>;
+  params: Promise<{ locale: Locale }>;
   searchParams?: Promise<{ c?: C }>;
 }) {
   const { locale } = await params;
@@ -35,36 +45,36 @@ export default async function Home({
   const t = await getTranslations({ locale, namespace: "home" });
   const sb = await supabaseServerRSC();
 
-  // UI -> BD
-  const map: Record<C, "game" | "show" | "anime" | "esport"> = {
+  const map: Record<C, Category> = {
     games: "game",
     shows: "show",
     anime: "anime",
-    esports: "esport",
+    esports: "esport"
   };
 
   let query = sb.from("v_upcoming").select("*").limit(24);
   if (c) query = query.eq("category", map[c]);
-  const { data: rows } = await query;
+
+  const { data: rows } = (await query) as unknown as { data: VUpcomingRow[] | null };
 
   const items = (rows ?? []).map((r) => ({
-    key: r.product_id ?? r.product_slug, // para React key
-    title: r.title as string,
-    label: r.season_label as string | null,
-    category: r.category as "game" | "show" | "anime" | "esport",
-    itemSlug: r.product_slug as string,
-    seasonSlug: (r.season_slug as string) ?? null,
-    coverUrl: (r.cover_url as string) ?? null,
-    dateIso: (r.release_at as string) ?? null,
-    status: r.status as "confirmed" | "estimated" | "delayed" | null,
-    sourceName: (r.source_name as string) ?? null,
-    sourceUrl: (r.source_url as string) ?? null,
+    key: (r.product_id ?? r.product_slug) as string,
+    title: r.title,
+    label: r.season_label,
+    category: r.category,
+    itemSlug: r.product_slug,
+    seasonSlug: r.season_slug,
+    coverUrl: r.cover_url,
+    dateIso: r.release_at,
+    status: r.status,
+    sourceName: r.source_name,
+    sourceUrl: r.source_url
   }));
 
   const searchList = (rows ?? []).map((r) => ({
     label: r.season_label ? `${r.title} • ${r.season_label}` : `${r.title}`,
-    href: `/${locale}/${r.category}/${r.product_slug}`, // página por producto
-    meta: r.category as string,
+    href: `/${locale}/${r.category}/${r.product_slug}`,
+    meta: r.category as string
   }));
 
   return (
@@ -73,7 +83,7 @@ export default async function Home({
         <div className="flex flex-col items-center gap-6">
           <div className="flex gap-2">
             {(["games", "shows", "anime", "esports"] as const).map((tab) => {
-              const active = c === tab || (!c && tab === "games"); // define tu default
+              const active = c === tab || (!c && tab === "games");
               return (
                 <a
                   key={tab}
@@ -82,7 +92,7 @@ export default async function Home({
                     "rounded-full px-3 py-1 text-sm border transition",
                     active
                       ? "bg-accent text-[color:var(--accent-foreground)] border-accent"
-                      : "hover:bg-accent/10",
+                      : "hover:bg-accent/10"
                   ].join(" ")}
                 >
                   {t(`tabs.${tab}`)}
@@ -90,32 +100,11 @@ export default async function Home({
               );
             })}
           </div>
-          <SearchCommand
-            items={searchList}
-            placeholder={t("searchPlaceholder")}
-          />
+          <SearchCommand items={searchList} placeholder={t("searchPlaceholder")} />
         </div>
 
-        <section className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((x, i) => (
-            <Fragment key={`row-${x.key}-${i}`}>
-              <div>
-                <SeasonCard data={x as any} locale={locale} />
-              </div>
-
-              {i % 6 === 5 && (
-                <div className="col-span-full">
-                  <div className="sm:hidden">
-                    <AdSlot id={`home-${i}`} size="rect" />
-                  </div>
-                  <div className="hidden sm:block">
-                    <AdSlot id={`home-${i}-banner`} size="banner" />
-                  </div>
-                </div>
-              )}
-            </Fragment>
-          ))}
-        </section>
+        {/* Aquí entra el scroll infinito */}
+        <InfiniteHome initialItems={items} locale={locale} categoryParam={c} />
       </main>
     </div>
   );

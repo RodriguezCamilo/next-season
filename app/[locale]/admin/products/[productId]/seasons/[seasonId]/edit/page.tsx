@@ -9,7 +9,7 @@ export default async function EditSeasonPage({
   const { data: s } = await sb.from("seasons").select("*").eq("id", seasonId).single();
 
   return (
-    <div className="max-w-2xl">
+    <div className=" flex flex-1 flex-col items-center">
       <h1 className="mb-4 text-xl font-semibold">Edit season</h1>
       <SeasonForm action={upsertSeason} productId={productId} initial={s ?? undefined} />
     </div>

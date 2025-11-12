@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { supabaseServerRSC } from "@/lib/supabase/rsc";
-
+import { deleteProduct } from "./actions";
+import DeleteConfirmButton from "./_deleteConfirmButton";
 export default async function ProductsPage({
   params,
 }: {
@@ -9,6 +10,16 @@ export default async function ProductsPage({
   const { locale } = await params;
   const sb = await supabaseServerRSC();
   const { data } = await sb.from("products").select("*").order("title");
+
+  // Server Action que SÍ respeta el tipo (Promise<void>)
+  async function deleteAction(formData: FormData): Promise<void> {
+    "use server";
+    const id = formData.get("id")?.toString();
+    if (!id) throw new Error("Missing id");
+    const res = await deleteProduct(id);
+    if (!res.ok) throw new Error(res.error || "Delete failed");
+    // opcional: revalidatePath aquí si querés, pero ya lo hacés en la action
+  }
 
   return (
     <div>
@@ -51,6 +62,12 @@ export default async function ProductsPage({
                   >
                     Seasons
                   </Link>
+
+                  {/* 🔧 Ahora el form usa una Server Action válida */}
+                  <form action={deleteAction} className="inline-block ml-2">
+                    <input type="hidden" name="id" value={p.id} />
+                    <DeleteConfirmButton />
+                  </form>
                 </td>
               </tr>
             ))}
