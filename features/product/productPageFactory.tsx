@@ -51,13 +51,17 @@ export function productPageFactory(category: Category) {
       .eq("category", category)
       .single<DbProduct>();
 
-    if (!product) return { title: "Next Season" };
+    if (!product) return { title: "SeasonTrack" };
 
-    const title = `${product.title} — ${category.toUpperCase()}`;
+    const title =
+      locale === "es"
+        ? `Cuándo sale la próxima temporada de ${product.title} | SeasonTrack`
+        : `When does the next season of ${product.title} come out? | SeasonTrack`;
+
     const desc =
-      locale === "en"
-        ? `Countdowns and release tracker for ${product.title}.`
-        : `Cuenta regresiva y próximos lanzamientos de ${product.title}.`;
+      locale === "es"
+        ? `Consulta la fecha de estreno y el estado de la próxima temporada de ${product.title}. Cuenta regresiva, temporadas anteriores y fuente oficial.`
+        : `Check the release date and status of the next season of ${product.title}. Countdown, past seasons and official source.`;
 
     return {
       title,
@@ -130,6 +134,17 @@ export function productPageFactory(category: Category) {
           new Date(b.release_at ?? 0).getTime() -
           new Date(a.release_at ?? 0).getTime()
       );
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": category === "game" ? "VideoGame" : "TVSeries",
+      name: product.title,
+      url: `${
+        process.env.NEXT_PUBLIC_SITE_URL ?? "https://SeasonTrack.app"
+      }/${locale}/${category}/${product.slug}`,
+      image: product.cover_url ?? undefined,
+      sameAs: product.official_url ? [product.official_url] : undefined,
+    };
 
     const fmt = (iso?: string | null) =>
       iso
@@ -316,6 +331,10 @@ export function productPageFactory(category: Category) {
               ← {locale === "en" ? "Back to home" : "Volver al inicio"}
             </Link>
           </nav>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
         </article>
 
         {/* Sidebar (solo desktop) */}

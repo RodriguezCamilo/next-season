@@ -78,7 +78,7 @@ export async function upsertProduct(formData: FormData) {
       ) ?? null;
 
     const seasonPayload = {
-      label: "Next season",
+      label: "Season track",
       release_at: payload.manual_release_at,
       status: (payload.manual_status || "confirmed") as
         | "confirmed"

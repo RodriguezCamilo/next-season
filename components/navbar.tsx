@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/70 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href={`/${locale}`} className="font-semibold tracking-tight">Next Season</Link>
+        <Link href={`/${locale}`} className="font-semibold tracking-tight">Season Track</Link>
         <nav className="flex items-center gap-4 text-sm text-muted-foreground">
           <Link href={`/${locale}/?c=games`} className="hover:text-foreground">{t("games")}</Link>
           <Link href={`/${locale}/?c=shows`} className="hover:text-foreground">{t("shows")}</Link>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export function buildSeasonMetadata(row: any): Metadata {
-  const titleBase = row?.item_title ? `${row.item_title} — ${row.label}` : "Next Season";
+  const titleBase = row?.item_title ? `${row.item_title} — ${row.label}` : "Season Track";
   const desc = row?.release_at
     ? `Cuenta regresiva y fecha de estreno: ${row.item_title} — ${row.label}`
     : `Fecha por confirmar: ${row?.item_title ?? ""} — ${row?.label ?? ""}`;

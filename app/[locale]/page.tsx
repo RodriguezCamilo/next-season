@@ -1,8 +1,8 @@
-// app/[locale]/page.tsx
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import SearchCommand from "@/components/search-command";
 import InfiniteHome from "@/components/infinite-home";
 import { supabaseServerRSC } from "@/lib/supabase/rsc";
+import type { Metadata } from "next";
 
 export const revalidate = 300;
 
@@ -24,12 +24,38 @@ type VUpcomingRow = {
   source_url: string | null;
 };
 
-export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  alternates: { canonical: "/", languages: { en: "/en", es: "/es" } },
-  title: "Next Season",
-  description: "Track next seasons for games, shows, anime & esports."
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://SeasonTrack.app";
+
+  const title =
+    locale === "es"
+      ? "Cuándo sale la próxima temporada de tus series, animes y juegos | SeasonTrack"
+      : "Track upcoming seasons for your favorite games, shows and anime | SeasonTrack";
+
+  const description =
+    locale === "es"
+      ? "SeasonTrack te muestra cuándo sale la próxima temporada de tus series, animes, videojuegos y esports favoritos. Cuenta regresiva, estados de estreno y fuentes oficiales."
+      : "SeasonTrack helps you track the next seasons of your favorite TV shows, anime, games and esports. Countdown, release status and official sources.";
+
+  return {
+    metadataBase: new URL(base),
+    title,
+    description,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        en: "/en",
+        es: "/es",
+      },
+    },
+  };
+}
+
 
 export default async function Home({
   params,

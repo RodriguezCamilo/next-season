@@ -39,7 +39,7 @@ export function SeasonCard({
   return (
     <article className="group overflow-hidden rounded-[var(--radius)] border border-border bg-card shadow-[0_10px_30px_rgba(0,0,0,.35)]">
       {hasCover ? (
-        <div className="relative aspect-[16/9]">
+        <Link href={href} className="relative block aspect-[16/9]">
           <Image
             src={data.coverUrl!}
             alt={`${data.title} cover`}
@@ -50,7 +50,7 @@ export function SeasonCard({
           {data.status && (
             <StatusPill status={data.status} label={tStatus(data.status)!} />
           )}
-        </div>
+        </Link>
       ) : (
         <div className="relative aspect-[16/9] bg-muted/40 grid place-items-center">
           <span className="text-xs text-muted-foreground">

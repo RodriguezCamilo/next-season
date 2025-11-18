@@ -4,7 +4,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/navbar";
-import { supabaseServerRSC } from "@/lib/supabase/rsc";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({

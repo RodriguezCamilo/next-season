@@ -23,9 +23,9 @@ export async function GET(req: Request) {
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//nextseason.app//EN",
+    "PRODID:-//seasontrack.app//EN",
     "BEGIN:VEVENT",
-    `UID:${crypto.randomUUID()}@nextseason.app`,
+    `UID:${crypto.randomUUID()}@seasontrack.app`,
     `DTSTAMP:${fmt(new Date())}`,
     `DTSTART:${fmt(start)}`,
     `DTEND:${fmt(end)}`,

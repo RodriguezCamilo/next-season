@@ -1,8 +1,8 @@
-# Next Season — Release Tracker for Anime, Games & Series
+# SeasonTrack — Release Tracker for Anime, Games & Series
 
-> 🇪🇸 Next Season es una herramienta para seguir fechas de estreno de animes, juegos y series: saber cuándo vuelve tu próxima temporada.
+> 🇪🇸 SeasonTrack es una herramienta para seguir fechas de estreno de animes, juegos y series: saber cuándo vuelve tu próxima temporada.
 
-Next Season is a side project focused on tracking **upcoming seasons and releases** (anime, games, movies, series) in a clean, searchable interface.
+SeasonTrack is a side project focused on tracking **upcoming seasons and releases** (anime, games, movies, series) in a clean, searchable interface.
 
 It uses a structured data model to store “products” (titles) with release dates, categories and sources.
 

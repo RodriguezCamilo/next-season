@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "image.tmdb.org" },         // TMDB
       { protocol: "https", hostname: "static-cdn.jtvnw.net" },   // Twitch
       { protocol: "https", hostname: "cdn.myanimelist.net" },   // MAL
-      { protocol: "https", hostname: "s4.anilist.co" }  
+      { protocol: "https", hostname: "s4.anilist.co" },
+      { protocol: "https", hostname: "m.media-amazon.com" },
     ],
   },
 };

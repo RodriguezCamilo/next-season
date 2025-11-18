@@ -1,18 +1,31 @@
-import { supabaseServer } from '@/lib/supabase/supabase';
+// app/sitemap.ts
+import { supabaseServer } from "@/lib/supabase/supabase";
 
 export default async function sitemap() {
   const sb = supabaseServer();
-  const { data } = await sb.from('v_upcoming').select('category_slug,item_slug,slug').limit(500);
-  const locales = ['es','en'] as const;
+  const { data } = await sb
+    .from("products")
+    .select("slug, category")
+    .limit(2000);
+
+  const locales = ["es", "en"] as const;
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://SeasonTrack.app";
+  const now = new Date().toISOString();
 
   const routes = [
-    ...locales.map((l) => ({ url: `https://nextseason.app/${l}`, lastModified: new Date().toISOString() })),
-    ...(data ?? []).flatMap((r) =>
+    // Home por idioma
+    ...locales.map((l) => ({
+      url: `${base}/${l}`,
+      lastModified: now,
+    })),
+    // Todas las fichas de producto
+    ...(data ?? []).flatMap((p) =>
       locales.map((l) => ({
-        url: `https://nextseason.app/${l}/${r.category_slug}/${r.item_slug}/${r.slug}`,
-        lastModified: new Date().toISOString()
+        url: `${base}/${l}/${p.category}/${p.slug}`,
+        lastModified: now,
       }))
-    )
+    ),
   ];
+
   return routes;
 }

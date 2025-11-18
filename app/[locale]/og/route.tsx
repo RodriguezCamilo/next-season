@@ -6,7 +6,7 @@ export const contentType = 'image/png';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const title = searchParams.get('title') ?? 'Next Season';
+  const title = searchParams.get('title') ?? 'Season Track';
   const subtitle = searchParams.get('subtitle') ?? '';
   return new ImageResponse(
     (
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
       >
         <div style={{ fontSize: 60, color: 'white', fontWeight: 700 }}>{title}</div>
         {subtitle && <div style={{ marginTop: 16, fontSize: 30, color: '#b9b29c' }}>{subtitle}</div>}
-        <div style={{ position: 'absolute', bottom: 40, right: 60, color: '#c6b68a' }}>nextseason.app</div>
+        <div style={{ position: 'absolute', bottom: 40, right: 60, color: '#c6b68a' }}>seasontrack.app</div>
       </div>
     ),
     { ...size }
