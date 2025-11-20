@@ -15,6 +15,8 @@ export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "es" }];
 }
 
+import GoogleAdSense from "@/components/google-adsense";
+
 export default async function LocaleLayout({
   children,
   params,
@@ -33,6 +35,7 @@ export default async function LocaleLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GoogleAdSense pId={process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-XXXXXXXXXXXXXXXX"} />
         <NextIntlClientProvider
           locale={locale}
           messages={messages}
